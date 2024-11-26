@@ -1,0 +1,346 @@
+.custom-bold {
+    font-weight: 800;  /* Vous pouvez ajuster le nombre selon la graisse souhaitée */
+  }
+  @keyframes slideIn {
+    0% {
+      transform: translateY(30px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  /* Appliquer l'animation à chaque lettre */
+  .letter {
+    display: inline-block;
+    opacity: 0;
+    animation: slideIn 0.5s ease forwards;
+  }
+  
+  /* Ajouter un délai différent pour chaque lettre */
+  .letter:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .letter:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .letter:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .letter:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .letter:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .letter:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .letter:nth-child(7) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(8) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(9) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(10) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(11) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(12) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(13) {
+    animation-delay: 0.7s;
+    
+  }  
+  .letter:nth-child(14) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(15) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(16) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(17) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(18) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter:nth-child(19) {
+    animation-delay: 0.7s;
+    
+  }
+
+  .letter1 {
+    display: inline-block;
+    opacity: 0;
+    animation: slideIn 0.5s ease forwards;
+  }
+  /* Ajouter un délai différent pour chaque lettre */
+  .letter1:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .letter1:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .letter1:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .letter1:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .letter1:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .letter1:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  .letter1:nth-child(7) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(8) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(9) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(10) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(11) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(12) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(13) {
+    animation-delay: 0.7s;
+    
+  }  
+  .letter1:nth-child(14) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(15) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(16) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(17) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(18) {
+    animation-delay: 0.1s;
+  }
+  .letter1:nth-child(19) {
+    animation-delay: 0.2s;
+  }
+  .letter1:nth-child(20) {
+    animation-delay: 0.3s;
+  }
+  .letter1:nth-child(21) {
+    animation-delay: 0.4s;
+  }
+  .letter1:nth-child(22) {
+    animation-delay: 0.5s;
+  }
+  .letter1:nth-child(23) {
+    animation-delay: 0.6s;
+  }
+  .letter1:nth-child(24) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(25) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(26) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(27) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(28) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(29) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(30) {
+    animation-delay: 0.7s;
+    
+  }  
+  .letter1:nth-child(31) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(32) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(33) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(34) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(35) {
+    animation-delay: 0.1s;
+  }
+  .letter1:nth-child(36) {
+    animation-delay: 0.2s;
+  }
+  .letter1:nth-child(37) {
+    animation-delay: 0.3s;
+  }
+  .letter1:nth-child(38) {
+    animation-delay: 0.4s;
+  }
+  .letter1:nth-child(39) {
+    animation-delay: 0.5s;
+  }
+  .letter1:nth-child(40) {
+    animation-delay: 0.6s;
+  }
+  .letter1:nth-child(41) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(42) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(43) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(44) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(45) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(46) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(47) {
+    animation-delay: 0.7s;
+    
+  }  
+  .letter1:nth-child(48) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(49) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(50) {
+    animation-delay: 0.7s;
+    
+  }
+  .letter1:nth-child(51) {
+    animation-delay: 0.7s;
+    
+  }
+ 
+ /* Styles CSS pour le formulaire */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.input-field, .textarea-field {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+  background-color: #f4f4f4;
+}
+
+.textarea-field {
+  resize: vertical;
+  height: 100px;
+}
+
+.file-input {
+  margin-top: 10px;
+}
+
+.image-preview {
+  margin-top: 10px;
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.submit-btn, .cancel-btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.cancel-btn:hover {
+  background-color: #e53935;
+}
