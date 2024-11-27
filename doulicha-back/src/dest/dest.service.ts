@@ -7,6 +7,7 @@ import { UpdateDestDto } from '../dto/update-dest.dto';
 import { UserService } from 'src/users/users.service';
 import { UserRole} from 'src/dto/register.dto';
 import { UserDocument } from 'src/models/users.models';
+import { CreateDestDto } from 'src/dto/create-dest.dto';
 
 @Injectable()
 export class DestService {
@@ -15,7 +16,7 @@ export class DestService {
     private readonly userService: UserService, // Injectez UserService ici
   ) {}
 
-  async create(destDto: DestDto, ownerId: string): Promise<Dest> {
+  async create(destDto: CreateDestDto, ownerId: string): Promise<Dest> {
     // Convertir les champs assignedTo et createdBy en ObjectId
     const photos = Array.isArray(destDto.photos) ? destDto.photos : [];
     const assignedTo = Array.isArray(destDto.assignedTo) ? destDto.assignedTo : [];
@@ -57,7 +58,7 @@ export class DestService {
   async update(id: string, updateDestDto: UpdateDestDto): Promise<Dest> {
     const updatedFields = {
       ...updateDestDto,
-      assignedTo: updateDestDto.assignedTo.map(userId => new Types.ObjectId(userId)), // Convertir les utilisateurs assignés en ObjectId
+      assignedTo: updateDestDto.assignedTo?.map(userId => new Types.ObjectId(userId)), // Convertir les utilisateurs assignés en ObjectId
     };
 
     const existingDest = await this.destModel.findByIdAndUpdate(id, updatedFields, { new: true }).exec();

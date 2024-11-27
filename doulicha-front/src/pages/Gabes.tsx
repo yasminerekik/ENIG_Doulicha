@@ -26,7 +26,7 @@ const Gabes = () => {
   const userRole = userData?.role;
 
   const [destination, setDestination] = useState<{
-    photos: string[]; // URL strings
+    photos: File[]; // URL strings
     name: string;
     description: string;
     address: string;
@@ -81,55 +81,30 @@ const Gabes = () => {
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-
-    try {
-      // Créez un objet FormData pour envoyer au backend
-      const formData = new FormData();
-      files.forEach((file) => formData.append('photos', file));
-      
-      // Ajouter les autres données du formulaire (nom, description, etc.)
-      formData.append('name', destination.name);
-      formData.append('description', destination.description);
-      formData.append('address', destination.address);
-
-      const apiUrl = import.meta.env.VITE_APP_API_URL;
-      const response = await fetch(`${apiUrl}dests`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: formData,
-      });
-
-      // Vérifiez si la réponse est correcte avant de tenter de la lire
-      if (!response.ok) {
-        const result = await response.text(); // lire la réponse en texte brut si ce n'est pas OK
-        console.error('Error uploading images:', result);
-        alert('Erreur lors du téléchargement des images: ' + result);
-        return;
-      }
-
-      // Lire la réponse en JSON seulement si elle est OK
-      const result = await response.json();
-      const photoUrls = result.photos; // Supposons que le backend renvoie un tableau d'URL d'images
-      setDestination({ ...destination, photos: photoUrls });
-      setImagePreviews(photoUrls);
-    } catch (error) {
-      console.error('Error during file upload:', error);
-    }
+    
+    setDestination({ ...destination, photos: files });
+    
   };
-
+console.log(destination)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+
+    formData.append('name', destination.name);
+    formData.append('description', destination.description);
+  formData.append('address', destination.address);
+ destination?.photos.forEach((file, index) => {
+    formData.append('photos', file); 
+  })
       const apiUrl = import.meta.env.VITE_APP_API_URL;
       const response = await fetch(`${apiUrl}dests`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          
           Authorization: `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(destination),
+        body: formData,
       });
       const newDest = await response.json();
       setDestinations([...destinations, newDest]);
@@ -300,9 +275,13 @@ const Gabes = () => {
                 accept="image/*"
                 onChange={handleFileChange}
                 className="w-full p-2 mb-4 rounded"
+               
               />
+              {destination.photos && destination.photos.map((file, index) => (
+  <img key={index} src={URL.createObjectURL(file)} alt={`preview-${index}`} />
+))}
 
-              <button
+              <button 
                 type="submit"
                 className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
               >

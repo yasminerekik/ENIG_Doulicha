@@ -23,6 +23,7 @@ import { Dest } from '../models/dest.models';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserRole } from 'src/dto/register.dto';
 import * as path from 'path';
+import { CreateDestDto } from 'src/dto/create-dest.dto';
 
 // Fonction utilitaire pour générer un nom de fichier unique
 function generateFileName(originalname: string): string {
@@ -38,6 +39,7 @@ export class DestController {
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseInterceptors(
+
     FilesInterceptor('photos', 10, {
       storage: diskStorage({
         destination: './uploads',
@@ -66,19 +68,16 @@ export class DestController {
         'Vous n\'avez pas l\'autorisation pour effectuer cette action',
       );
     }
-
-    // Vérification que le DTO et les photos sont présents
-    if (!destDto || !photos || photos.length === 0) {
-      throw new BadRequestException('Les photos doivent être un tableau non vide');
-    }
-
     const photoUrls = photos.map((file) => `http://localhost:5000/uploads/${file.filename}`);
-    destDto.photos = photoUrls;
+    let newdto:CreateDestDto = {address:destDto.address,description:destDto.description,name:destDto.name,photos:photoUrls };
+
+  
+    
 
     try {
       const ownerId = req.user._id;
       console.log('Received files:', photos); // Log des fichiers reçus
-      return this.destService.create(destDto, ownerId);
+      return this.destService.create(newdto, ownerId);
     } catch (error) {
       console.error('Error during file processing:', error);
       throw new InternalServerErrorException('Erreur serveur lors du traitement des fichiers');
