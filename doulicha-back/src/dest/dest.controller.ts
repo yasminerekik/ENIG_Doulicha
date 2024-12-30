@@ -95,19 +95,43 @@ export class DestController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Put(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateDestDto: UpdateDestDto,
-    @Request() req,
-  ): Promise<Dest> {
-    if (req.user.role !== UserRole.OWNER) {
-      throw new UnauthorizedException(
-        'Vous n\'avez pas l\'autorisation pour effectuer cette action',
-      );
-    }
-    return this.destService.update(id, updateDestDto);
+@Put(':id')
+@UseInterceptors(
+  FilesInterceptor('photos', 10, {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, cb) => {
+        const fileName = generateFileName(file.originalname);
+        cb(null, fileName);
+      },
+    }),
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5 MB limit
+    },
+  }),
+)
+async update(
+  @Param('id') id: string,
+  @UploadedFiles() photos: Express.Multer.File[],
+  @Body() destDto: DestDto,
+  @Request() req,
+): Promise<Dest> {
+  if (req.user.role !== UserRole.OWNER) {
+    throw new UnauthorizedException('Vous n\'avez pas l\'autorisation pour effectuer cette action');
   }
+
+  const photoUrls = photos.length > 0 ? photos.map(file => `http://localhost:5000/uploads/${file.filename}`) : [];
+  let newdto:CreateDestDto = {address:destDto.address,description:destDto.description,name:destDto.name,photos:photoUrls };
+
+
+  try {
+    return this.destService.update(id, destDto, photoUrls);
+  } catch (error) {
+    console.error('Error during file processing:', error);
+    throw new InternalServerErrorException('Erreur serveur lors du traitement des fichiers');
+  }
+}
+
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')

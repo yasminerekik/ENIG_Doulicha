@@ -54,19 +54,25 @@ export class DestService {
     return dest;
   }
 
-  // Mettre à jour une destination
-  async update(id: string, updateDestDto: UpdateDestDto): Promise<Dest> {
-    const updatedFields = {
-      ...updateDestDto,
-      assignedTo: updateDestDto.assignedTo?.map(userId => new Types.ObjectId(userId)), // Convertir les utilisateurs assignés en ObjectId
-    };
+  // Mettre à jour une destination avec photos
+async update(id: string, updateDestDto: UpdateDestDto, photos: string[]): Promise<Dest> {
+  // Convert photos to an array if not provided
+  const photoUrls = Array.isArray(photos) ? photos : [];
+  
+  const updatedFields = {
+    ...updateDestDto,
+    assignedTo: updateDestDto.assignedTo?.map(userId => new Types.ObjectId(userId)), // Convert assigned users to ObjectId if provided
+    photos: photoUrls.length > 0 ? photoUrls : updateDestDto.photos // Update photos if new ones are uploaded, otherwise use existing
+  };
 
-    const existingDest = await this.destModel.findByIdAndUpdate(id, updatedFields, { new: true }).exec();
-    if (!existingDest) {
-      throw new NotFoundException(`Destination with ID ${id} not found`);
-    }
-    return existingDest;
+  const existingDest = await this.destModel.findByIdAndUpdate(id, updatedFields, { new: true }).exec();
+  if (!existingDest) {
+    throw new NotFoundException(`Destination with ID ${id} not found`);
   }
+  return existingDest;
+}
+
+
 
   // Supprimer une destination
   async remove(id: string): Promise<Dest> {

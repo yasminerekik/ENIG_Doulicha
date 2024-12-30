@@ -45,6 +45,37 @@ const Signin = () => {
     }
   };
 
+  const [emailInput, setEmailInput] = useState(""); // Utilisation de noms différents
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const handleSubmit2 = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:5000/reset-password', { // Remplacez par l'URL de votre backend
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: emailInput }),
+      });
+  
+      if (response.ok) {
+        alert('Check your email for reset instructions.');
+      } else {
+        alert('Error sending reset email. Please try again.');
+      }
+  
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Something went wrong. Please try again later.');
+    }
+  };
+
+  
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -78,9 +109,9 @@ const Signin = () => {
             <div className="flex items-center justify-between">
               <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">Password</label>
               <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500" onClick={toggleModal}>Forgot password?</a>
               </div>
-            </div>
+              </div>
             <div className="mt-2">
               <input
                 id="password"
@@ -107,7 +138,29 @@ const Signin = () => {
 
         {error && <p className="text-red-600 text-center mt-4">{error}</p>}
       </div>
-    </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full">
+            <h2 className="text-lg font-semibold mb-4">Reset Password</h2>
+            <form onSubmit={handleSubmit2}>
+            <input
+          type="email"
+          value={emailInput}
+          onChange={(e) => setEmailInput(e.target.value)}
+          required
+        />
+        <button type="submit">Submit</button>
+            </form>
+            <button
+              onClick={toggleModal}
+              className="mt-4 text-sm text-gray-500 hover:text-gray-700"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+            </div>
   );
 };
 
