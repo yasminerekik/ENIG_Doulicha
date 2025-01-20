@@ -19,6 +19,9 @@ export class CreateDestDto {
   @ArrayMinSize(1) // Au moins une photo
   photos: string[];
 
+  features?: string[];
+  cityName: string;
+
   // Liste des utilisateurs assignés (avec rôle "guest")
   @IsArray()
   @ArrayNotEmpty()

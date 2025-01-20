@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import '../components/Navbar.css';
+import { AnimatedText } from './AnimatedText';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Home = () => {
       <Navbar />
       <section 
         onClick={handleClick}  // Call handleClick for navigation
+        className="relative h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden"
         style={{
           backgroundImage: "url('/images/home.png')",
           height: '900px',
@@ -41,19 +43,11 @@ const Home = () => {
           position: 'relative'
         }}
       >
-        <p 
-          style={{
-            position: 'absolute',
-            zIndex: 1,
-            height: '400px',  // Exemple de hauteur
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }} 
-          className='custom-bold'
-        >
-          Tap here to explore breathtaking locations.
-        </p>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/60" />
+         {/* Content */}
+         <div className="relative z-10">
+          <AnimatedText />
+        </div>
       </section>
     </div>
   );

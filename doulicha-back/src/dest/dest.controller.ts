@@ -69,7 +69,7 @@ export class DestController {
       );
     }
     const photoUrls = photos.map((file) => `http://localhost:5000/uploads/${file.filename}`);
-    let newdto:CreateDestDto = {address:destDto.address,description:destDto.description,name:destDto.name,photos:photoUrls };
+    let newdto:CreateDestDto = {address:destDto.address,description:destDto.description,name:destDto.name,photos:photoUrls,features:destDto.features || [], cityName: destDto.cityName }  // Ajout des features };
 
   
     
@@ -121,7 +121,7 @@ async update(
   }
 
   const photoUrls = photos.length > 0 ? photos.map(file => `http://localhost:5000/uploads/${file.filename}`) : [];
-  let newdto:CreateDestDto = {address:destDto.address,description:destDto.description,name:destDto.name,photos:photoUrls };
+  let newdto:CreateDestDto = {address:destDto.address,description:destDto.description,name:destDto.name,photos:photoUrls, cityName:destDto.cityName };
 
 
   try {
@@ -143,4 +143,12 @@ async update(
     }
     return this.destService.remove(id);
   }
+
+
+  @Get('city/:cityName')
+async getDestinationsByCity(@Param('cityName') cityName: string): Promise<Dest[]> {
+  return this.destService.findDestinationsByCity(cityName);
+}
+
+
 }

@@ -2,7 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { UserService } from '../users/users.service'; // Assurez-vous d'avoir un service utilisateur pour vérifier les e-mails
 import * as dotenv from 'dotenv';
-import { debug } from 'console';
+import { UserDocument } from 'src/models/users.models';
+import * as bcrypt from 'bcrypt';
+import { getResetPasswordTemplate } from './reset-password.template';
 dotenv.config();
 @Injectable()
 export class ResetPasswordService {
@@ -17,10 +19,11 @@ export class ResetPasswordService {
     }
 
     // Générer un token de réinitialisation (par exemple, un JWT ou un code aléatoire)
-    const resetToken = Math.random().toString(36).substring(2, 15); // À remplacer par un vrai token
-
+    const resetCode = Math.random().toString(36).substring(2, 10); // À remplacer par un vrai token
+    user.resetToken = resetCode; // Sauvegarder le code dans la base de données
+    await user.save();
     // Création du lien de réinitialisation
-    const resetPasswordLink = `http://yourfrontend.com/reset-password?token=${resetToken}`;
+    const resetLink = `http://yourfrontend.com/reset-password?code=${resetCode}&email=${email}`;
 
     // Loguer les informations d'identification pour le débogage
     this.logger.log(`Using credentials - User: ${process.env.MAIL_USER}`);
@@ -38,7 +41,7 @@ export class ResetPasswordService {
     });
     this.logger.log(`MAIL_USER: ${process.env.MAIL_USER}`);
 this.logger.log(`MAIL_PASS: ${process.env.MAIL_PASS}`);
-
+     // Template d'e-mail HTML avec du style
 
     try {
       // Envoi de l'e-mail
@@ -46,14 +49,8 @@ this.logger.log(`MAIL_PASS: ${process.env.MAIL_PASS}`);
         from: 'rekikyasmine28@gmail.com',
         to: email,
         subject: 'Password Reset Request',
-        html: 
-        `<p>Bonjour,</p>
-        <p>Nous avons reçu une demande de réinitialisation de votre mot de passe. Pour réinitialiser votre mot de passe, cliquez sur le bouton ci-dessous :</p>
-        <a href="${resetPasswordLink}" style="display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Réinitialiser le mot de passe</a>
-        <p>Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet email.</p>
-        <p>Merci,</p>
-        <p>L'équipe de votre site</p>
-      `,
+        html: getResetPasswordTemplate(resetCode, resetLink),
+        text: `Voici votre code de réinitialisation: ${resetCode}.`,
       });
 
       this.logger.log(`Reset password email sent to: ${email}`);
@@ -69,6 +66,22 @@ this.logger.log(`MAIL_PASS: ${process.env.MAIL_PASS}`);
   async verifyUserByEmail(email: string): Promise<boolean> {
     const user = await this.userService.findByEmail(email);
     return !!user; // Retourne true si l'utilisateur existe, sinon false
+  }
+
+  async verifyResetCode(email: string, code: string): Promise<UserDocument> {
+    const user = await this.userService.findByEmail(email);
+    if (!user || user.resetToken !== code) {
+      throw new Error('Invalid or expired reset code');
+    }
+    return user;
+  }
+
+  async updatePassword(email: string, newPassword: string, code: string): Promise<void> {
+    const user = await this.verifyResetCode(email, code);
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetToken = null; // Supprimer le code après utilisation
+    await user.save();
   }
 
 }

@@ -45,4 +45,12 @@ export class NotificationService {
 
     return this.notificationModel.find(query).exec();
   }
+
+  async delete(id: string): Promise<void> {
+    const result = await this.notificationModel.deleteOne({ _id: id }).exec();
+    if (result.deletedCount === 0) {
+      throw new NotFoundException(`Notification with id ${id} not found`);
+    }
+  }
+  
 }

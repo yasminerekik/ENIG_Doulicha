@@ -35,6 +35,8 @@ export class DestService {
       photos: photos,
       createdBy: new Types.ObjectId(ownerId),
       assignedTo: guestIds, // Affecter les utilisateurs ayant le rôle 'guest'
+      features: destDto.features || [],
+      cityName: destDto.cityName,
     });
 
     return newDest.save();
@@ -82,4 +84,10 @@ async update(id: string, updateDestDto: UpdateDestDto, photos: string[]): Promis
     }
     return deletedDest;
   }
+
+  async findDestinationsByCity(cityName: string): Promise<Dest[]> {
+    return this.destModel.find({ cityName }).exec(); // Assurez-vous que `cityName` est un champ dans le modèle de destination
+  }
+  
+  
 }

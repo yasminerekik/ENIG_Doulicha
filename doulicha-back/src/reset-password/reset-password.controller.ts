@@ -55,4 +55,18 @@ export class ResetPasswordController {
     }
   }
 
+  // Nouvelle route pour vérifier le code de réinitialisation
+  @Post('verify-code')
+  async verifyResetCode(
+    @Body('email') email: string, 
+    @Body('code') code: string
+  ): Promise<{ message: string }> {
+    try {
+      await this.resetPasswordService.verifyResetCode(email, code);  // Vérifie le code
+      return { message: 'Code validé avec succès' };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST); // Code invalide
+    }
+  }
+
 }

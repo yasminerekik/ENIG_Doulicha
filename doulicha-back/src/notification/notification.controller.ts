@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Patch, Delete } from '@nestjs/common';
 import { NotificationService } from './notification.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ReservationService } from 'src/reservation/reservation.service';
@@ -69,6 +69,13 @@ export class NotificationController {
     @Param('etat') etat: 'done' | 'not yet' | 'all',
   ) {
     return this.notificationService.getFilteredNotifications(ownerId, etat);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteNotification(@Param('id') id: string): Promise<void> {
+    console.log(`Received request to delete notification with id: ${id}`);
+    return this.notificationService.delete(id);
   }
 }
 

@@ -24,6 +24,9 @@ export class User {
 
   @Prop({ required: true, enum: UserRole })
   role: UserRole;
+
+  @Prop()
+  resetToken?: string; // Code de réinitialisation temporaire
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

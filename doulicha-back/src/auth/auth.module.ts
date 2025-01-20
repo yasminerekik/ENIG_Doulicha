@@ -7,6 +7,7 @@ import { User, UserSchema } from '../models/users.models';
 import { JwtStrategy } from './jwt-strategy';
 import { UsersModule } from 'src/users/users.module'; // Assurez-vous que UsersModule est importé
 import { PassportModule } from '@nestjs/passport';
+import { ResetPasswordService } from 'src/reset-password/reset-password.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { PassportModule } from '@nestjs/passport';
     }),
     UsersModule, // Importez UsersModule pour que UserService soit disponible
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, ResetPasswordService],
   controllers: [AuthController],
 })
 export class AuthModule {}

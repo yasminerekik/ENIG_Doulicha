@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Navbar.css';
 import { useNavigate } from 'react-router-dom';
+import { Logo } from './Logo';
+import { Logo1 } from './Logo1';
+import { ArrowRight, Bell, Calendar, Check, ChevronDown, LogOut, Mail, Phone, TrashIcon, UserCircle, Users, X } from 'lucide-react';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -333,19 +336,46 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   };
   const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!)._id : null;
   console.log('userId:', userId);
-   
+  
+  const handleDeleteNotification = async (id: string) => {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.error('No access token available');
+      return null; // Retourner null si aucun token n'est trouvé
+    }
+  
+    const apiUrl = import.meta.env.VITE_APP_API_URL;
+    try {
+      const response = await fetch(`${apiUrl}notifications/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`, // Ajoutez l'authentification si nécessaire
+        },
+      });
+  
+      if (response.ok) {
+        // Notification supprimée avec succès, mettre à jour l'interface utilisateur si nécessaire
+        console.log('Notification deleted');
+        window.location.reload();
+        // Logique pour mettre à jour la liste des notifications
+      } else {
+        console.error('Failed to delete notification');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
 
   return (
     <div>
       <nav className="bg-gray-800 fixed w-full top-0 z-10">
-        <div className="max-w-full px-2 sm:px-4 lg:px-6">
-          <div className="relative flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-4 ml-2">
-              <span className="text-white text-2xl font-bold tracking-wide shadow-lg bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 px-3 py-1 rounded-lg">
-                Doulicha
-              </span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative flex h-20 items-center justify-between">
+          <div className="flex-shrink-0">
+              <Logo1 />
             </div>
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="hidden md:flex items-center space-x-8">
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
                   {!isLoggedIn && (
@@ -353,7 +383,7 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
                       <a
                         href="#welcome"
                         onClick={() => scrollToSection('welcome')}
-                        className="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white custom-bold"
+                         className="text-gray-100 hover:text-purple-600 font-medium transition-colors"
                         aria-current="page"
                       >
                         Welcome
@@ -361,15 +391,14 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
                       <a
                         href="#about-us"
                         onClick={() => scrollToSection('about-us')}
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white custom-bold"
-                      >
+                        className="text-gray-100 hover:text-purple-600 font-medium transition-colors"                      >
                         About Us
                       </a>
                       <a
                         href="#contact"
                         onClick={() => scrollToSection('contact')}
-                        className="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white custom-bold"
-                      >
+                        className="text-gray-100 hover:text-purple-600 font-medium transition-colors"
+                        >
                         Contact
                       </a>
                     </>
@@ -377,21 +406,23 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
                 </div>
               </div>
             </div>
-            <div className="button-container flex space-x-4">
+            <div className="flex items-center space-x-4">
               {!isLoggedIn ? (
                 <>
+                  <div className="flex space-x-3">
                   <button
-                    className="sign-in-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={navigateToSignIn}
+className="px-4 py-2 text-gray-100 font-medium hover:text-purple-700 transition-colors"                    
+onClick={navigateToSignIn}
                   >
                     Sign In
                   </button>
                   <button
-                    className="sign-up-button bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={navigateToSignUp}
+className="px-4 py-2 bg-purple-600 text-white font-medium rounded-full hover:bg-purple-700 transition-colors shadow-md hover:shadow-lg"                    
+onClick={navigateToSignUp}
                   >
                     Sign Up
                   </button>
+                  </div>
                 </>
               ) : (
                 <div className="relative ml-3 flex items-center space-x-4">
@@ -400,69 +431,58 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     aria-haspopup="true"
     onClick={toggleNotifications}
     type="button"
-    className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+    className="group relative rounded-full p-2 transition-all duration-300 hover:bg-gray-700"
   >
     <span className="sr-only">View notifications</span>
-    <svg
-      className="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
-      />
-    </svg>
+    <Bell className="h-6 w-6 text-gray-400 transition-colors group-hover:text-white" />
+        {notifications.length > 0 && (
+          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+            {notifications.length}
+          </span>
+        )}
   </button>
   
   {/* Notifications dropdown */}
   {showNotifications && notifications.length > 0 && (
-    <div className="absolute right-0 top-10 w-64 bg-white rounded-lg shadow-lg z-10">
+    <div className="absolute right-0 top-12 w-96 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black/5 transition-all">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
+            <h3 className="text-lg font-semibold text-white">Notifications</h3>
+          </div>
       {/* Filtrage uniquement pour l'owner */}
       {userRole === 'owner' && (
-        <div className="flex justify-around p-2">
-          <button
-            onClick={() => setFilter('all')}
-            className={`btn btn-primary ${filter === 'all' ? 'active' : ''}`}
-          >
-            All
-          </button>
-    <button
-      onClick={() => {
-        setFilter('done');
-      }}
-      className={`btn btn-success ${filter === 'done' ? 'active' : ''}`}
-    >
-      Done
-    </button>
-    <button
-      onClick={() => {
-        setFilter('not yet');
-      }}
-      className={`btn btn-warning ${filter === 'not yet' ? 'active' : ''}`}
-    >
-      Not Yet
-    </button>
-
-        </div>
-      )}
+         <div className="flex gap-2 border-b border-gray-100 p-3">
+         {['all', 'done', 'not yet'].map((filterType) => (
+           <button
+             key={filterType}
+             onClick={() => setFilter(filterType)}
+             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
+               filter === filterType
+                 ? 'bg-indigo-500 text-white'
+                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+             }`}
+           >
+             {filterType.charAt(0).toUpperCase() + filterType.slice(1)}
+           </button>
+         ))}
+       </div>
+     )}
 
       {/* Liste des notifications */}
-      <ul className="py-2 max-h-48 overflow-y-auto">
+      <div className="max-h-[400px] overflow-y-auto">
         {filteredNotifications.map((notification) => (
-          <li
-            className={`px-4 py-2 text-sm text-gray-700 border-b last:border-none ${
-              notification.message.startsWith("New reservation") ? "bg-blue-100" : ""
-            }`}
+          <div
+            className={`group relative border-b border-gray-100 p-4 transition-all ${
+                  notification.message.startsWith('New reservation')
+                    ? 'bg-blue-50'
+                    : ''
+                }`}
             key={notification._id}
           >
-            <div>
+            <div className="flex items-start justify-between">
+            <div className="flex-1">
               <p onClick={() => {
-                   handleNotificationClick(notification)}}>{notification.message}</p>
+                   handleNotificationClick(notification)}} className="text-sm text-gray-700">{notification.message}</p>
               {/* Show "View details" only for the owner */}
           {dest?.createdBy === userId && notification.message.startsWith("New reservation") && (
           <button
@@ -471,9 +491,9 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
               fetchReservationDetails(notification.reservationId);
               toggleModal(); // Récupérer les détails de la réservation au clic
             }}
-            className="text-blue-500 hover:text-blue-700 underline"
+            className="mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-700"
           >
-            View details
+            View details →
           </button>
         )}
             </div>
@@ -486,106 +506,153 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
             handleCheckNotification(notification._id);
             setSelectedNotification(null); // Reset selected notification to close the comment box
           }}
+          className="ml-4 rounded-full p-1 text-gray-400 transition-all hover:bg-green-100 hover:text-green-600"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6 text-green-500 hover:text-green-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+          <Check className="h-5 w-5" />
         </button>
             )}
-          </li>
+             {/* Ajouter l'icône de suppression */}
+  <button
+    onClick={(e) => {
+      e.stopPropagation(); // Prevent click from propagating to the parent li
+      handleDeleteNotification(notification._id);
+    }}
+    className="ml-4 rounded-full p-1 text-red-400 transition-all hover:bg-red-100 hover:text-red-600"
+  >
+    <TrashIcon className="h-5 w-5" /> {/* Assurez-vous d'avoir une icône de suppression, ex: un TrashIcon */}
+  </button>
+          </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   )}
 
-  {/* Fenêtre modale pour les détails de la réservation */}
-  {showModal && selectedReservation && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-lg font-semibold text-gray-700">Reservation Details</h2>
-            <p><strong>Fullname:</strong> {selectedReservation.fullname}</p>
-            <p><strong>Email:</strong> {selectedReservation.email}</p>
-            <p><strong>Phone:</strong> {selectedReservation.phone}</p>
-            <p><strong>Start Date:</strong> {new Date(selectedReservation.startDate).toLocaleDateString()}</p>
-            <p><strong>End Date:</strong> {new Date(selectedReservation.endDate).toLocaleDateString()}</p>
-            <p><strong>Number of Persons:</strong> {selectedReservation.numberOfPersons}</p>
-            <button
-              onClick={toggleModal}
-              className="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg w-full"
-            >
-              Close
-            </button>
-          </div>
-          </div>
-      )}
-     
+{showModal && selectedReservation && (
+  <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full transform transition-all overflow-hidden">
+      {/* En-tête avec effet de gradient */}
+      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-white">
+        <h2 className="text-xl font-bold">Reservation Details</h2>
+      </div>
 
-  {/* Comment box */}
-  {dest?.createdBy === userId && selectedNotification && (
-    <div className="absolute right-0 top-48 w-64 bg-white rounded-lg shadow-lg z-10 p-4 mt-4">
-      <div className="flex justify-between items-center">
-        <h4 className="text-sm font-semibold text-gray-700">Add comment</h4>
+      {/* Corps de la modale avec animation */}
+      <div className="p-4 space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="col-span-2 flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+            <UserCircle className="w-5 h-5 text-blue-500" />
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Guest</p>
+              <p className="font-medium text-sm">{selectedReservation.fullname}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+            <Mail className="w-5 h-5 text-blue-500" />
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Email</p>
+              <p className="font-medium text-sm">{selectedReservation.email}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+            <Phone className="w-5 h-5 text-blue-500" />
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Phone</p>
+              <p className="font-medium text-sm">{selectedReservation.phone}</p>
+            </div>
+          </div>
+
+          <div className="col-span-2 flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+            <Calendar className="w-5 h-5 text-blue-500" />
+            <div className="flex-1">
+              <p className="text-xs text-gray-500 dark:text-gray-400">Stay</p>
+              <div className="flex items-center gap-2 text-sm">
+                <span>{new Date(selectedReservation.startDate).toLocaleDateString()}</span>
+                <ArrowRight className="w-4 h-4 text-gray-400" />
+                <span>{new Date(selectedReservation.endDate).toLocaleDateString()}</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="col-span-2 flex items-center space-x-3 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg">
+            <Users className="w-5 h-5 text-blue-500" />
+            <div>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Guests</p>
+              <p className="font-medium text-sm">{selectedReservation.numberOfPersons} persons</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Pied de la modale */}
+      <div className="border-t border-gray-100 dark:border-gray-700 p-3">
         <button
-          onClick={closeCommentBox}
-          className="text-gray-500 hover:text-gray-700"
+          onClick={toggleModal}
+          className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium py-2 px-4 rounded-lg 
+                   hover:from-blue-600 hover:to-purple-700 transition-all duration-200 hover:shadow-lg
+                   focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 text-sm"
         >
-          &#x2715;
+          Close
         </button>
       </div>
-      <textarea
-        className="w-full mt-2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-        placeholder="Votre commentaire"
-        value={comment}
-        onChange={handleCommentChange}
-      ></textarea>
-      <button
-        onClick={handleSubmitComment}
-        className="mt-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg w-full"
-      >
-        Submit
-      </button>
     </div>
-  )}
+  </div>
+)}
+     
+
+        {/* Comment Box */}
+        {dest?.createdBy === userId && selectedNotification && (
+        <div className="absolute right-0 top-48 w-80 rounded-lg bg-white p-4 shadow-lg">
+          <div className="mb-3 flex items-center justify-between">
+            <h4 className="text-sm font-semibold text-gray-900">Add Comment</h4>
+            <button
+              onClick={closeCommentBox}
+              className="rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <textarea
+            className="min-h-[100px] w-full rounded-lg border border-gray-200 p-3 text-sm transition-all focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            placeholder="Write your comment here..."
+            value={comment}
+            onChange={handleCommentChange}
+          />
+          <button
+            onClick={handleSubmitComment}
+            className="mt-3 w-full rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-2 text-sm font-medium text-white transition-all hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          >
+            Submit Comment
+          </button>
+        </div>
+      )}
 
 
-                  <div className="relative">
-                    <button
-                      type="button"
-                      className="flex rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      id="user-menu-button"
-                      aria-expanded={isMenuOpen}
-                      aria-haspopup="true"
-                      onClick={toggleMenu} // Toggle the dropdown menu on click
-                    >
-                      <span className="sr-only">Open user menu</span>
-                      <span className="inline-block h-8 w-8 rounded-full bg-gray-500 text-white flex items-center justify-center">
-                        {getInitials(user.firstname, user.lastname)}
-                      </span>
-                    </button>
-                    {isMenuOpen && (
-                      <div
-                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-none"
-                        role="menu"
-                        aria-orientation="vertical"
-                        aria-labelledby="user-menu-button"
-                      >
-                        <button
-                          onClick={handleLogout}
-                          className="block px-4 py-2 text-sm text-gray-700 custom-bold"
-                        >
-                          Logout
-                        </button>
+                  {/* User Menu */}
+      <div className="relative">
+        <button
+          type="button"
+          className="group flex items-center space-x-2 rounded-full bg-gray-800 p-1.5 text-sm transition-all duration-300 hover:bg-gray-700"
+          onClick={toggleMenu}
+        >
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-sm font-medium text-white ring-2 ring-white">
+            {getInitials(user.firstname, user.lastname)}
+          </span>
+          <ChevronDown className="h-4 w-4 text-gray-400 transition-transform duration-300 group-hover:text-white" 
+            style={{ transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0)' }}
+          />
+        </button>
+
+        {isMenuOpen && (
+          <div className="absolute right-0 mt-2 w-48 origin-top-right scale-100 transform rounded-lg bg-white py-1 opacity-100 shadow-lg ring-1 ring-black/5 transition-all">
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center px-4 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Sign out</span>
+            </button>
                       </div>
                     )}
                   </div>
@@ -674,7 +741,7 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   </div>
 </section>
 
-<section id="contact" className="h-screen bg-pink-100 flex flex-col items-center justify-center">
+<section id="contact" className="h-screen bg-green-100 flex flex-col items-center justify-center">
   <h1 className="text-5xl font-bold text-brown-800">
     <span className="text-brown-600 custom-bold">Dou</span>licha
   </h1>
@@ -682,15 +749,15 @@ const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   Doulicha is your complete solution to discover the best leisure space.
   </p>
   <div className="flex space-x-4 mt-4 custom-bold">
-    <a href="#" className="text-brown-500 text-2xl hover:text-brown-700">
+    <a href="#" className="text-purple-500 text-2xl hover:text-purple-700">
       <i className="fab fa-facebook"></i>
     </a>
-    <a href="#" className="text-brown-500 text-2xl hover:text-brown-700">
+    <a href="#" className="text-purple-500 text-2xl hover:text-purple-700">
       <i className="fab fa-instagram"></i>
     </a>
   </div>
   <p className="text-brown-600 text-sm mt-6 custom-bold">
-    Designed By <a href="#" className="text-brown-800 underline">Rahma & Yasmine</a>
+    Designed By <a href="#" className="underline text-purple-500 hover:text-purple-500">Rahma & Yasmine</a>
   </p>
 </section>
         </>

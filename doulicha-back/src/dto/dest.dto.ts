@@ -15,6 +15,10 @@ export class DestDto {
   readonly address: string;
 
   
+ 
+  readonly features?: string[];
+  readonly cityName: string;
+  
 
  
 }

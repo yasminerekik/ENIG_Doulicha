@@ -34,7 +34,7 @@ export class ReservationService {
     const ownerId = destination.createdBy.toString();
 
     // Préparez le message de notification
-    const message = `New reservation for ${createReservationDto.fullname} from ${createReservationDto.startDate} to ${createReservationDto.endDate} for the place : ${destination.name}.`;
+    const message = `New reservation for ${createReservationDto.fullname} from ${createReservationDto.startDate} to ${createReservationDto.endDate} for the place : ${destination.name} in ${destination.cityName}.`;
     const type = 'reservation'; // Type de notification
 
     // Créez la notification et envoyez-la à l'owner en incluant reservationId
