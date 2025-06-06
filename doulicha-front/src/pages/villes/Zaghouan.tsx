@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Calendar, Car, ChevronDown, Clock, Coffee, DumbbellIcon, MapPin, Navigation, PawPrint, PenSquare, Search, Shirt, SlidersHorizontal, Sparkles, Trash2, Tv, Utensils, Waves, Wifi, Wind, X } from 'lucide-react';
 import { getFeatureIcon } from '../featureIcons';
 
-const Zaghouan = () => {
+const Zaghouan  = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<string[]>([]);
